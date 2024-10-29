@@ -19,16 +19,38 @@ export const createRecordFormHandler = (event) => {
   const currentProduct = fruits.find(
     ({ id }) => id == formData.get("product_select")
   );
-  recordGroup.append(createRecordRow(currentProduct, formData.get("quantity")));
-  createRecordForm.reset();
+
+  const isExisted = document.querySelector(
+    `[product-id='${currentProduct.id}']`
+  );
+  console.log(isExisted);
+  if (isExisted === null) {
+    recordGroup.append(
+      createRecordRow(currentProduct, formData.get("quantity"))
+    );
+    createRecordForm.reset();
+  } else {
+    Swal.fire({
+      title: `Are u sure to add quantity to ${currentProduct.name} `,
+      text: `you won't able to revert this`,
+      icon: `question`,
+      showCancelButton: true,
+      confirmButtonText: `Yes, add it`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        updateRecordQuantity(isExisted.id, parseInt(formData.get("quantity")));
+      }
+    });
+  }
+
   //   console.log(currentProduct.id
 
-//   const total = calculateRecordTotal();
-//   const tax = calculateTax(total);
+  //   const total = calculateRecordTotal();
+  //   const tax = calculateTax(total);
 
-//   recordTotal.innerText = total;
-//   recordTax.innerText = tax;
-//   recordNetTotal.innerText = total + tax;
+  //   recordTotal.innerText = total;
+  //   recordTax.innerText = tax;
+  //   recordNetTotal.innerText = total + tax;
 };
 
 export const createRecordRow = ({ id, name, price }, quantity) => {
@@ -81,21 +103,43 @@ export const removeRecord = (rowId) => {
     }
   });
 };
+const updateRecordQuantity = (rowId, newQuantity) => {
+  const currentRecordRow = recordGroup.querySelector(`[id = '${rowId}']`);
+  const recordProductPrice = currentRecordRow.querySelector(
+    ".record-product-price"
+  );
+  const recordQuantity = currentRecordRow.querySelector(".record-quantity");
+  const recordCost = currentRecordRow.querySelector(".record-cost");
 
-export const recordRemoveHandler = (event) => {
+  if (newQuantity > 0 || recordQuantity.innerText > 1) {
+    recordQuantity.innerText = parseInt(recordQuantity.innerText) + newQuantity;
+    recordCost.innerText =
+      recordProductPrice.innerText * recordQuantity.innerText;
+  }
+};
+//  recordQuantity.innerText = parseInt(recordQuantity.innerText) + newQuantity;
+//  recordCost.innerText = recordProductPrice.innerText * recordQuantity.innerText;
+
+export const recordGroupHandler = (event) => {
   if (event.target.classList.contains("record-remove")) {
     const currentRecordRow = event.target.closest(".record-row");
     removeRecord(currentRecordRow.id);
+  } else if (event.target.classList.contains("quantity-add")) {
+    const currentRecordRow = event.target.closest(".record-row");
+    updateRecordQuantity(currentRecordRow.id, 1);
+  } else if (event.target.classList.contains("quantity-sub")) {
+    const currentRecordRow = event.target.closest(".record-row");
+    updateRecordQuantity(currentRecordRow.id, -1);
   }
 };
-const updateTotal =() => {  
+const updateTotal = () => {
   const total = calculateRecordTotal();
   const tax = calculateTax(total);
 
   recordTotal.innerText = total;
   recordTax.innerText = tax;
   recordNetTotal.innerText = total + tax;
-}
+};
 
 export const recordGroupObserver = () => {
   const observerOptions = {
@@ -103,6 +147,6 @@ export const recordGroupObserver = () => {
     subtrees: true,
   };
 
-  const observer = new MutationObserver(updateTotal)
-  observer.observe(recordGroup,observerOptions)
+  const observer = new MutationObserver(updateTotal);
+  observer.observe(recordGroup, observerOptions);
 };

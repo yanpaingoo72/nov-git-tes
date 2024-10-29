@@ -15,7 +15,7 @@
         </div>
       </header>
       <section>
-        <div class="container mb-5">
+        <div class="container mb-5 block print:hidden">
           <form id="createRecordForm" class="">
             <div class="grid grid-cols-4 gap-3 bg-blue-50 rounded-lg p-3">
               <div class="col-span-2">
@@ -76,7 +76,12 @@
                   <th scope="col" class="px-6 py-3 text-end">Price</th>
                   <th scope="col" class="px-6 py-3 text-end">Quantity</th>
                   <th scope="col" class="px-6 py-3 text-end">Cost</th>
-                  <th scope="col" class="px-6 py-3 text-end">Action</th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-end table-cell print:hidden"
+                  >
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody id="recordGroup">
@@ -148,6 +153,7 @@
               </tfoot>
             </table>
           </div>
+          <p class="mt-5 hidden text-center print:block font-sans font-bold " >Thanks for Buying💕</p>
         </div>
       </section>
       <section
@@ -229,7 +235,7 @@
       </section>
       <footer class="mt-auto">
         <div class="container py-3">
-          <div class="flex justify-end gap-3">
+          <div class="flex justify-end gap-3 print:hidden">
             <button
               class="active:scale-90"
               id="manageInventoryBtn"
@@ -240,10 +246,11 @@
             </button>
 
             <button
+              id="checkout"
               type="button"
               class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
-              Print
+              Checkout
             </button>
           </div>
         </div>
@@ -255,21 +262,57 @@
         </div>
       </template>
       <template id="recordRowTemplate">
-        <tr
-          class="record-row  border-b dark:border-gray-700 mb-2"
-        >
+        <tr class="record-row border-b dark:border-gray-700 mb-2 group">
           <th
             scope="row"
             class="record-product-name px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
           >
             Apple
           </th>
-          <td class="record-product-price px-6 py-4 text-end">500</td>
-          <td class="record-quantity px-6 py-4 text-end">3</td>
-          <td class="record-cost px-6 py-4 text-end">1500</td>
+          <td class="record-product-price px-6 py-4 text-end">0</td>
+
           <td class="px-6 py-4 text-end">
             <button
-              
+              class="quantity-sub hidden group-hover:inline-block active:scale-90 border rounded-full border-blue-700 text-blue-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-4 pointer-events-none"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M5 12h14"
+                />
+              </svg>
+            </button>
+            <span class="record-quantity inline-block w-5 text-center">0</span>
+            <button
+              class="quantity-add hidden group-hover:inline-block active:scale-90 border rounded-full border-blue-700 text-blue-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-4 pointer-events-none"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+            </button>
+          </td>
+          <td class="record-cost px-6 py-4 text-end">0</td>
+          <td class="px-6 py-4 text-end table-cell print:hidden">
+            <button
               class="record-remove font-medium text-blue-600 dark:text-blue-500 hover:underline"
             >
               Remove

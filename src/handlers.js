@@ -13,3 +13,6 @@ export const closeSideBarBtnHandler = () => {
 
 }
 
+export const checkoutHandler =() => {
+    window.print()
+}
